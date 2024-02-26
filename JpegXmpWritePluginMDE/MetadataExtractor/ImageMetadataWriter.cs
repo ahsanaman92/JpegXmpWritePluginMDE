@@ -22,25 +22,12 @@
 //
 #endregion
 
-using System.Collections.Generic;
-using System.IO;
 using JetBrains.Annotations;
-using MetadataExtractor.Formats.Bmp;
 #if !PORTABLE
 using MetadataExtractor.Formats.FileSystem;
 #endif
-using MetadataExtractor.Formats.Gif;
-using MetadataExtractor.Formats.Ico;
 using MetadataExtractor.Formats.Jpeg;
-using MetadataExtractor.Formats.Pcx;
-using MetadataExtractor.Formats.Photoshop;
-using MetadataExtractor.Formats.Png;
-using MetadataExtractor.Formats.QuickTime;
-using MetadataExtractor.Formats.Raf;
-using MetadataExtractor.Formats.Tiff;
-using MetadataExtractor.Formats.WebP;
 using MetadataExtractor.Util;
-using System.Xml.Linq;
 
 namespace MetadataExtractor
 {

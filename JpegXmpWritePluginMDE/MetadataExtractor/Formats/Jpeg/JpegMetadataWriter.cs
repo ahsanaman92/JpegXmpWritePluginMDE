@@ -22,27 +22,13 @@
 //
 #endregion
 
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using JetBrains.Annotations;
-using MetadataExtractor.Formats.Adobe;
-using MetadataExtractor.Formats.Exif;
-using MetadataExtractor.Formats.Icc;
-using MetadataExtractor.Formats.Iptc;
-using MetadataExtractor.Formats.Jfif;
-using MetadataExtractor.Formats.Jfxx;
-using MetadataExtractor.Formats.Photoshop;
 #if !PORTABLE
 using MetadataExtractor.Formats.FileSystem;
 #endif
 using MetadataExtractor.Formats.Xmp;
 using MetadataExtractor.IO;
 using System.Xml.Linq;
-using System.Text;
-using System;
-using System.Xml;
-using System.Diagnostics;
 
 namespace MetadataExtractor.Formats.Jpeg
 {
@@ -95,7 +81,7 @@ namespace MetadataExtractor.Formats.Jpeg
         /// <param name="metadata">Collection of metadata items.</param>
         /// <param name="writers">A dictionary that maps metadata types to compatible JpegMetadataWriters.</param>
         /// <returns>The updated list of JpegFragments</returns>
-        public static List<JpegFragment> UpdateJpegFragments([NotNull] List<JpegFragment> fragments, [NotNull] IEnumerable<object> metadata, [NotNull] Dictionary<Type, IJpegFragmentMetadataWriter> writers = null)
+        public static List<JpegFragment> UpdateJpegFragments([NotNull] List<JpegFragment> fragments, [NotNull] IEnumerable<object> metadata, [NotNull] Dictionary<Type, IJpegFragmentMetadataWriter>? writers = null)
         {
             if (writers == null)
                 writers = _allWriters;
