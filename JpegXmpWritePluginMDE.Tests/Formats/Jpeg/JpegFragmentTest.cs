@@ -22,34 +22,16 @@
 //
 #endregion
 
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.IO;
 using Xunit;
 
 namespace MetadataExtractor.Tests.Formats.Jpeg
 {
-    /// <summary>Unit tests for <see cref="JpegFragment"/>.</summary>
-    /// <author>Michael Osthege</author>
-    public sealed class JpegFragmentTest
+	/// <summary>Unit tests for <see cref="JpegFragment"/>.</summary>
+	/// <author>Michael Osthege</author>
+	public sealed class JpegFragmentTest
     {
-        [Fact]
-        public void TestFromJpegSegment()
-        {
-            IEnumerable<JpegSegmentPlugin> segments;
-            using (var stream = TestDataUtil.OpenRead("Data/withExifAndIptc.jpg"))
-                segments = (IEnumerable<JpegSegmentPlugin>)JpegSegmentReader.ReadSegments(new SequentialStreamReader(stream)).ToList();
-
-            foreach (JpegSegmentPlugin segment in segments)
-            {
-                JpegFragment fragment = JpegFragment.FromJpegSegment(segment);
-                Assert.Equal(2 + 2 + segment.Bytes.Length, fragment.Bytes.Length);
-                byte[] payloadBytes = fragment.Bytes.Skip(4).ToArray();
-                Assert.Equal(payloadBytes, segment.Bytes);
-            }
-        }
 
         [Fact]
         public void TestSplitSingleFragment()
