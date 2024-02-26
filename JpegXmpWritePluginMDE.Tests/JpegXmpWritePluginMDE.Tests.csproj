@@ -25,4 +25,25 @@
     <ProjectReference Include="..\JpegXmpWritePluginMDE\JpegXmpWritePluginMDE.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\xmpWriting_MicrosoftXmp.app1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\xmpWriting_MicrosoftXmpReencoded.app1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\xmpWriting_PictureWithMicrosoftXmp.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\xmpWriting_PictureWithMicrosoftXmpReencoded.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\xmpWriting_PictureWithoutXmp.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\xmpWriting_XmpContent.xmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
