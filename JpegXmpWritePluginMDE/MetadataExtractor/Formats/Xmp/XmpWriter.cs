@@ -1,9 +1,5 @@
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using MetadataExtractor.Formats.Jpeg;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -68,7 +64,7 @@ namespace MetadataExtractor.Formats.Xmp
                         // This App1 segment could be a candidate for overwriting.
                         // Read the encountered segment payload to check if it contains the Xmp preamble
                         string potentialPreamble = Encoding.UTF8.GetString(currentFragment.Segment.Bytes, 0, XmpReader.JpegSegmentPreamble.Length);
-                        if (potentialPreamble.Equals(XmpReader.JpegSegmentPreamble, StringComparison.OrdinalIgnoreCase))
+                        if (potentialPreamble.Equals(Encoding.UTF8.GetString(XmpReader.JpegSegmentPreamble.ToArray()), StringComparison.OrdinalIgnoreCase))
                         {
                             // The existing Xmp App1 fragment will be replaced with the new fragment
                             currentFragment = metadataFragment;
@@ -106,7 +102,7 @@ namespace MetadataExtractor.Formats.Xmp
         public static byte[] EncodeXmpToPayloadBytes([NotNull] XDocument xmpDoc, bool writeable=true)
         {
             // constant parts
-            byte[] preamble = Encoding.UTF8.GetBytes(XmpReader.JpegSegmentPreamble);
+			byte[] preamble = Encoding.UTF8.GetBytes(Encoding.UTF8.GetString(XmpReader.JpegSegmentPreamble.ToArray()));
             byte[] xpacketHeader = Encoding.UTF8.GetBytes("<?xpacket begin=\"\uFEFF\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>");
             byte[] xpacketTrailer = Encoding.UTF8.GetBytes($"<?xpacket end='{ (writeable ? 'w' : 'r') }'?>");
 
