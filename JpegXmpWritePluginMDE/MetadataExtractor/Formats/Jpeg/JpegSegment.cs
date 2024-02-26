@@ -24,6 +24,7 @@
 
 using JetBrains.Annotations;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace MetadataExtractor.Formats.Jpeg
 {
@@ -32,13 +33,13 @@ namespace MetadataExtractor.Formats.Jpeg
     /// </summary>
     /// <seealso cref="JpegSegmentReader"/>
     /// <author>Drew Noakes https://drewnoakes.com</author>
-    public sealed class JpegSegment(JpegSegmentType type, byte[] bytes, long offset)
+    public sealed class JpegSegmentPlugin
     {
         public JpegSegmentType Type { get; }
         [NotNull] public byte[] Bytes { get; }
         public long Offset { get; }
 
-        public JpegSegment(JpegSegmentType type, [NotNull] byte[] bytes, long offset)
+        public JpegSegmentPlugin(JpegSegmentType type, [NotNull] byte[] bytes, long offset)
         {
             Type = type;
             Bytes = bytes;

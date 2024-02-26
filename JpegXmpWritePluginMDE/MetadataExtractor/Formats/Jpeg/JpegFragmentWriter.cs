@@ -103,13 +103,13 @@ namespace MetadataExtractor.Formats.Jpeg
                     if (segmentType.ContainsPayload())
                     {
                         // To read the segment payload, the segment length must be decoded:
-                        var payloadLength = JpegSegment.DecodePayloadLength(reader.GetByte(), reader.GetByte());
+                        var payloadLength = JpegSegmentPlugin.DecodePayloadLength(reader.GetByte(), reader.GetByte());
                         if (payloadLength < 0)
                             throw new JpegProcessingException("JPEG segment size would be less than zero.");
                         var segmentOffset = reader.Position;
                         var payloadBytes = reader.GetBytes(payloadLength);
                         Debug.Assert(payloadLength == payloadBytes.Length);
-                        var segment = new JpegSegment(segmentType, payloadBytes, segmentOffset);
+                        var segment = new JpegSegmentPlugin(segmentType, payloadBytes, segmentOffset);
                         fragments.Add(JpegFragment.FromJpegSegment(segment));
                     }
                     else

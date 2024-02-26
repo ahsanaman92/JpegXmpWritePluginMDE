@@ -21,7 +21,7 @@ namespace MetadataExtractor.Formats.Jpeg
         /// JpegSegment interpretation of this fragment.
         /// </summary>
         [CanBeNull]
-        public JpegSegment Segment { get; }
+        public JpegSegmentPlugin Segment { get; }
 
         /// <summary>
         /// All bytes that make up the JpegFragment. (Includes potential JpegSegment marker + size)
@@ -34,7 +34,7 @@ namespace MetadataExtractor.Formats.Jpeg
         /// </summary>
         /// <param name="bytes">All bytes that make up the fragment.</param>
         /// <param name="segment">Optional JpegSegment interpretation of this fragment.</param>
-        public JpegFragment([NotNull] byte[] bytes, [CanBeNull] JpegSegment segment = null)
+        public JpegFragment([NotNull] byte[] bytes, [CanBeNull] JpegSegmentPlugin segment = null)
         {
             Bytes = bytes;
             Segment = segment;
@@ -53,7 +53,7 @@ namespace MetadataExtractor.Formats.Jpeg
         /// </summary>
         /// <param name="segment">A JpegSegment</param>
         /// <returns>A JpegFragment that is the concatenation of JpegSegment marker, size bytes and payload.</returns>
-        public static JpegFragment FromJpegSegment(JpegSegment segment)
+        public static JpegFragment FromJpegSegment(JpegSegmentPlugin segment)
         {
             byte[] fragmentBytes = new byte[2 + 2 + segment.Bytes.Length];
 
@@ -62,7 +62,7 @@ namespace MetadataExtractor.Formats.Jpeg
             fragmentBytes[1] = (byte)segment.Type;
 
             // Segment size
-            byte[] sizeBytes = JpegSegment.EncodePayloadLength(segment.Bytes.Length);
+            byte[] sizeBytes = JpegSegmentPlugin.EncodePayloadLength(segment.Bytes.Length);
             sizeBytes.CopyTo(fragmentBytes, 2);
 
             // Segment payload

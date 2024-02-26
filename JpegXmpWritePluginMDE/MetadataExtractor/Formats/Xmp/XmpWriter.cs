@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using MetadataExtractor.Formats.Jpeg;
 using System;
 using System.Collections.Generic;
@@ -43,7 +43,7 @@ namespace MetadataExtractor.Formats.Xmp
             if (metadata is XDocument)
             {
                 byte[] payloadBytes = EncodeXmpToPayloadBytes((XDocument)metadata);
-                JpegSegment metadataSegment = new JpegSegment(JpegSegmentType.App1, payloadBytes, offset: 0);
+                JpegSegmentPlugin metadataSegment = new JpegSegmentPlugin(JpegSegmentType.App1, payloadBytes, offset: 0);
                 metadataFragment = JpegFragment.FromJpegSegment(metadataSegment);
             }
             else
