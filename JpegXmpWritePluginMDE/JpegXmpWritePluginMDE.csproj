@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
-    <PackageReference Include="MetadataExtractor" Version="2.9.0-rc1" />
-    <PackageReference Include="xunit.assert" Version="2.7.0" />
+    <PackageReference Include="JetBrains.Annotations"/>
+    <PackageReference Include="MetadataExtractor"/>
+    <PackageReference Include="xunit.assert"/>
   </ItemGroup>
 
 </Project>
