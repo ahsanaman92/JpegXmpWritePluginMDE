@@ -24,13 +24,15 @@
 
 using JetBrains.Annotations;
 using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg;
+using MetadataExtractor;
+
 
 #if !PORTABLE
 using MetadataExtractor.Formats.FileSystem;
 #endif
 using MetadataExtractor.Util;
 
-namespace MetadataExtractor
+namespace JpegXmpWritePluginMDE.MetadataExtractor
 {
 	/// <summary>Writes metadata to any supported file format.</summary>
 	/// <remarks>
@@ -52,47 +54,47 @@ namespace MetadataExtractor
 	/// <author>Michael Osthege</author>
 	/// <exception cref="ImageProcessingException">on unsupported file types</exception>
 	public static class ImageMetadataWriter
-    {
-                /// <summary>Writes metadata to a <see cref="Stream"/>.</summary>
-        /// <param name="stream">A stream to which the file data may be written.  The stream must be positioned at the beginning of the file's data.</param>
-        /// <param name="metadata">Collection of metadata objects.</param>
-        /// <exception cref="ImageProcessingException">The file type is unknown, or processing errors occurred.</exception>
-        /// <exception cref="System.IO.IOException"/>
-        [NotNull]
-        public static MemoryStream WriteMetadata([NotNull] Stream stream, IEnumerable<object> metadata)
-        {
-            var fileType = FileTypeDetector.DetectFileType(stream);
-            switch (fileType)
-            {
-                case FileType.Jpeg: return JpegMetadataWriter.WriteMetadata(stream, metadata);
-                //case FileType.Tiff:
-                //case FileType.Arw:
-                //case FileType.Cr2:
-                //case FileType.Nef:
-                //case FileType.Orf:
-                //case FileType.Rw2:
-                //    return TiffMetadataReader.ReadMetadata(stream);
-                //case FileType.Psd:
-                //    return PsdMetadataReader.ReadMetadata(stream);
-                //case FileType.Png:
-                //    return PngMetadataReader.ReadMetadata(stream);
-                //case FileType.Bmp:
-                //    return new[] { BmpMetadataReader.ReadMetadata(stream) };
-                //case FileType.Gif:
-                //    return new[] { GifMetadataReader.ReadMetadata(stream) };
-                //case FileType.Ico:
-                //    return IcoMetadataReader.ReadMetadata(stream);
-                //case FileType.Pcx:
-                //    return new[] { PcxMetadataReader.ReadMetadata(stream) };
-                //case FileType.Riff:
-                //    return WebPMetadataReader.ReadMetadata(stream);
-                //case FileType.Raf:
-                //    return RafMetadataReader.ReadMetadata(stream);
-                //case FileType.QuickTime:
-                //    return QuicktimeMetadataReader.ReadMetadata(stream);
-            }
+	{
+		/// <summary>Writes metadata to a <see cref="Stream"/>.</summary>
+		/// <param name="stream">A stream to which the file data may be written.  The stream must be positioned at the beginning of the file's data.</param>
+		/// <param name="metadata">Collection of metadata objects.</param>
+		/// <exception cref="ImageProcessingException">The file type is unknown, or processing errors occurred.</exception>
+		/// <exception cref="IOException"/>
+		[NotNull]
+		public static MemoryStream WriteMetadata([NotNull] Stream stream, IEnumerable<object> metadata)
+		{
+			var fileType = FileTypeDetector.DetectFileType(stream);
+			switch (fileType)
+			{
+				case FileType.Jpeg: return JpegMetadataWriter.WriteMetadata(stream, metadata);
+					//case FileType.Tiff:
+					//case FileType.Arw:
+					//case FileType.Cr2:
+					//case FileType.Nef:
+					//case FileType.Orf:
+					//case FileType.Rw2:
+					//    return TiffMetadataReader.ReadMetadata(stream);
+					//case FileType.Psd:
+					//    return PsdMetadataReader.ReadMetadata(stream);
+					//case FileType.Png:
+					//    return PngMetadataReader.ReadMetadata(stream);
+					//case FileType.Bmp:
+					//    return new[] { BmpMetadataReader.ReadMetadata(stream) };
+					//case FileType.Gif:
+					//    return new[] { GifMetadataReader.ReadMetadata(stream) };
+					//case FileType.Ico:
+					//    return IcoMetadataReader.ReadMetadata(stream);
+					//case FileType.Pcx:
+					//    return new[] { PcxMetadataReader.ReadMetadata(stream) };
+					//case FileType.Riff:
+					//    return WebPMetadataReader.ReadMetadata(stream);
+					//case FileType.Raf:
+					//    return RafMetadataReader.ReadMetadata(stream);
+					//case FileType.QuickTime:
+					//    return QuicktimeMetadataReader.ReadMetadata(stream);
+			}
 
-            throw new ImageProcessingException("File format is not supported");
-        }
-    }
+			throw new ImageProcessingException("File format is not supported");
+		}
+	}
 }

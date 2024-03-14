@@ -25,36 +25,37 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.IO;
 using Xunit;
 
-namespace MetadataExtractor.Tests.Formats.Jpeg
+namespace JpegXmpWritePluginMDE.Tests.Formats.Jpeg
 {
-    /// <summary>Unit tests for <see cref="JpegSegment"/>.</summary>
-    /// <author>Michael Osthege</author>
-    public sealed class JpegSegmentTest
-    {
-        [Fact]
-        public void TestEncodeSegmentLength()
-        {
-            // we are just interested in the payload length
-            int expected = 42802 - 2;
-            // the encoded value is 42802 because it includes the length mark
-            byte[] encoded = new byte[] { 0xA7, 0x32 };
-            int decoded = JpegSegmentPlugin.DecodePayloadLength(encoded[0], encoded[1]);
+	/// <summary>Unit tests for <see cref="JpegSegment"/>.</summary>
+	/// <author>Michael Osthege</author>
+	public sealed class JpegSegmentTest
+	{
+		[Fact]
+		public void TestEncodeSegmentLength()
+		{
+			// we are just interested in the payload length
+			int expected = 42802 - 2;
+			// the encoded value is 42802 because it includes the length mark
+			byte[] encoded = new byte[] { 0xA7, 0x32 };
+			int decoded = JpegSegmentPlugin.DecodePayloadLength(encoded[0], encoded[1]);
 
-            Assert.Equal(expected, decoded);
-        }
+			Assert.Equal(expected, decoded);
+		}
 
-        [Fact]
-        public void TestDecodeSegmentLength()
-        {
-            int decoded = 42802 - 2;
-            byte[] expected = new byte[] { 0xA7, 0x32 };
-            byte[] encoded = JpegSegmentPlugin.EncodePayloadLength(decoded);
+		[Fact]
+		public void TestDecodeSegmentLength()
+		{
+			int decoded = 42802 - 2;
+			byte[] expected = new byte[] { 0xA7, 0x32 };
+			byte[] encoded = JpegSegmentPlugin.EncodePayloadLength(decoded);
 
-            Assert.True(encoded.SequenceEqual(expected));
-        }
-    }
+			Assert.True(encoded.SequenceEqual(expected));
+		}
+	}
 }

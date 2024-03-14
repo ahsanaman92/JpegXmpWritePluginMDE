@@ -1,5 +1,7 @@
 ﻿using JetBrains.Annotations;
+using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.Formats.Jpeg;
+using MetadataExtractor.Formats.Xmp;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -10,17 +12,17 @@ using XmpCore.Options;
 #if NET35
 using FragmentList = System.Collections.Generic.IList<MetadataExtractor.Formats.Jpeg.JpegFragment>;
 #else
-using FragmentList = System.Collections.Generic.IReadOnlyList<MetadataExtractor.Formats.Jpeg.JpegFragment>;
+using FragmentList = System.Collections.Generic.IReadOnlyList<JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg.JpegFragment>;
 #endif
 
-namespace MetadataExtractor.Formats.Xmp
+namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Xmp
 {
-    public sealed class XmpWriter : IJpegFragmentMetadataWriter
-    {
-        /// <summary>
-        /// Specifies the type of metadata that this MetadataWriter can handle.
-        /// </summary>
-        Type IJpegFragmentMetadataWriter.MetadataXmpMetaType => typeof(XmpMeta);
+	public sealed class XmpWriter : IJpegFragmentMetadataWriter
+	{
+		/// <summary>
+		/// Specifies the type of metadata that this MetadataWriter can handle.
+		/// </summary>
+		Type IJpegFragmentMetadataWriter.MetadataXmpMetaType => typeof(XmpMeta);
 
 		/// <summary>
 		/// Updates a list of JpegFragments with new metadata.
@@ -54,46 +56,46 @@ namespace MetadataExtractor.Formats.Xmp
 
 			// Walk over existing fragment and replace or insert the new metadata fragment
 			for (int i = 0; i < fragments.Count; i++)
-            {
-                JpegFragment currentFragment = fragments[i];
+			{
+				JpegFragment currentFragment = fragments[i];
 
-                if (!wroteData && currentFragment.IsSegment)
-                {
-                    JpegSegmentType currentType = currentFragment.Segment.Type;
+				if (!wroteData && currentFragment.IsSegment)
+				{
+					JpegSegmentType currentType = currentFragment.Segment.Type;
 
-                    // if this is an existing App1 XMP fragment, overwrite it with the new fragment
-                    if (currentType == JpegSegmentType.App1 && currentFragment.Segment.Bytes.Length > XmpReader.JpegSegmentPreamble.Length)
-                    {
-                        // This App1 segment could be a candidate for overwriting.
-                        // Read the encountered segment payload to check if it contains the Xmp preamble
-                        string potentialPreamble = Encoding.UTF8.GetString(currentFragment.Segment.Bytes, 0, XmpReader.JpegSegmentPreamble.Length);
-                        if (potentialPreamble.Equals(Encoding.UTF8.GetString(XmpReader.JpegSegmentPreamble.ToArray()), StringComparison.OrdinalIgnoreCase))
-                        {
-                            // The existing Xmp App1 fragment will be replaced with the new fragment
-                            currentFragment = metadataFragment;
-                            wroteData = true;
-                        }
-                    }
-                    else if (insertPosition == 0 && currentType != JpegSegmentType.Soi && currentType != JpegSegmentType.App0)
-                    {
-                        // file begins with Soi (App0) (App1) ...
-                        // At this point we have encountered a segment that should not be earlier than an App1.
-                        // But there could be another Xmp segment, so we just make a note of this position
-                        insertPosition = i;
-                    }
-                }
-                output.Add(currentFragment);
-            }
+					// if this is an existing App1 XMP fragment, overwrite it with the new fragment
+					if (currentType == JpegSegmentType.App1 && currentFragment.Segment.Bytes.Length > XmpReader.JpegSegmentPreamble.Length)
+					{
+						// This App1 segment could be a candidate for overwriting.
+						// Read the encountered segment payload to check if it contains the Xmp preamble
+						string potentialPreamble = Encoding.UTF8.GetString(currentFragment.Segment.Bytes, 0, XmpReader.JpegSegmentPreamble.Length);
+						if (potentialPreamble.Equals(Encoding.UTF8.GetString(XmpReader.JpegSegmentPreamble.ToArray()), StringComparison.OrdinalIgnoreCase))
+						{
+							// The existing Xmp App1 fragment will be replaced with the new fragment
+							currentFragment = metadataFragment;
+							wroteData = true;
+						}
+					}
+					else if (insertPosition == 0 && currentType != JpegSegmentType.Soi && currentType != JpegSegmentType.App0)
+					{
+						// file begins with Soi (App0) (App1) ...
+						// At this point we have encountered a segment that should not be earlier than an App1.
+						// But there could be another Xmp segment, so we just make a note of this position
+						insertPosition = i;
+					}
+				}
+				output.Add(currentFragment);
+			}
 
-            if (!wroteData)
-            {
-                // The files does not contain an App1-Xmp segment yet.
-                // Therefore we must insert a new App1-Xmp segment at the previously determined position.
-                output.Insert(insertPosition, metadataFragment);
-                wroteData = true;
-            }
+			if (!wroteData)
+			{
+				// The files does not contain an App1-Xmp segment yet.
+				// Therefore we must insert a new App1-Xmp segment at the previously determined position.
+				output.Insert(insertPosition, metadataFragment);
+				wroteData = true;
+			}
 
-            return output;
-        }
-    }
+			return output;
+		}
+	}
 }

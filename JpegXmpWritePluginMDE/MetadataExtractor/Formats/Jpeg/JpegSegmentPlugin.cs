@@ -23,58 +23,59 @@
 #endregion
 
 using JetBrains.Annotations;
+using MetadataExtractor.Formats.Jpeg;
 using System;
 using System.Runtime.CompilerServices;
 
-namespace MetadataExtractor.Formats.Jpeg
+namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 {
-    /// <summary>
-    /// Holds information about a JPEG segment.
-    /// </summary>
-    /// <seealso cref="JpegSegmentReader"/>
-    /// <author>Drew Noakes https://drewnoakes.com</author>
-    public sealed class JpegSegmentPlugin
-    {
-        public JpegSegmentType Type { get; }
-        [NotNull] public byte[] Bytes { get; }
-        public long Offset { get; }
+	/// <summary>
+	/// Holds information about a JPEG segment.
+	/// </summary>
+	/// <seealso cref="JpegSegmentReader"/>
+	/// <author>Drew Noakes https://drewnoakes.com</author>
+	public sealed class JpegSegmentPlugin
+	{
+		public JpegSegmentType Type { get; }
+		[NotNull] public byte[] Bytes { get; }
+		public long Offset { get; }
 
-        public JpegSegmentPlugin(JpegSegmentType type, [NotNull] byte[] bytes, long offset)
-        {
-            Type = type;
-            Bytes = bytes;
-            Offset = offset;
-        }
+		public JpegSegmentPlugin(JpegSegmentType type, [NotNull] byte[] bytes, long offset)
+		{
+			Type = type;
+			Bytes = bytes;
+			Offset = offset;
+		}
 
-        /// <summary>
-        /// Computes the length of a segment payload from the high/low bytes of the index.
-        /// (Segment length excludes the index bytes.)
-        /// </summary>
-        /// <param name="highByte">first byte of the index</param>
-        /// <param name="lowByte">second byte of the index</param>
-        /// <returns></returns>
-        public static int DecodePayloadLength(byte highByte, byte lowByte)
-        {
-            // the segment length includes size bytes, so subtract two
-            if (BitConverter.IsLittleEndian)
-                return BitConverter.ToUInt16(new byte[] { lowByte, highByte }, 0) - 2;
-            else
-                return BitConverter.ToUInt16(new byte[] { highByte, lowByte }, 0) - 2;
-        }
+		/// <summary>
+		/// Computes the length of a segment payload from the high/low bytes of the index.
+		/// (Segment length excludes the index bytes.)
+		/// </summary>
+		/// <param name="highByte">first byte of the index</param>
+		/// <param name="lowByte">second byte of the index</param>
+		/// <returns></returns>
+		public static int DecodePayloadLength(byte highByte, byte lowByte)
+		{
+			// the segment length includes size bytes, so subtract two
+			if (BitConverter.IsLittleEndian)
+				return BitConverter.ToUInt16(new byte[] { lowByte, highByte }, 0) - 2;
+			else
+				return BitConverter.ToUInt16(new byte[] { highByte, lowByte }, 0) - 2;
+		}
 
-        /// <summary>
-        /// Encodes (big endian) the length of a segment into the index bytes of the segment.
-        /// </summary>
-        /// <param name="payloadLength">Length of the payload (excludes the index)</param>
-        /// <returns>segment-index bytes (length 2)</returns>
-        public static byte[] EncodePayloadLength(int payloadLength)
-        {
-            // the segment length includes the high & low bytes, so add 2
-            byte[] bytes = BitConverter.GetBytes(payloadLength + 2);
-            if (BitConverter.IsLittleEndian)
-                return new byte[] { bytes[1], bytes[0] };
-            else
-                return bytes;
-        }
-    }
+		/// <summary>
+		/// Encodes (big endian) the length of a segment into the index bytes of the segment.
+		/// </summary>
+		/// <param name="payloadLength">Length of the payload (excludes the index)</param>
+		/// <returns>segment-index bytes (length 2)</returns>
+		public static byte[] EncodePayloadLength(int payloadLength)
+		{
+			// the segment length includes the high & low bytes, so add 2
+			byte[] bytes = BitConverter.GetBytes(payloadLength + 2);
+			if (BitConverter.IsLittleEndian)
+				return new byte[] { bytes[1], bytes[0] };
+			else
+				return bytes;
+		}
+	}
 }

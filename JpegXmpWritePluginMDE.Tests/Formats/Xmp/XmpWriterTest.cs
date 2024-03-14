@@ -22,23 +22,24 @@
 //
 #endregion
 
+using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg;
+using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Xmp;
 using MetadataExtractor.Formats.Jpeg;
-using MetadataExtractor.Formats.Xmp;
 using MetadataExtractor.IO;
 using System.Xml.Linq;
 using XmpCore;
 using XmpCore.Options;
 using Xunit;
 
-namespace MetadataExtractor.Tests.Formats.Xmp
+namespace JpegXmpWritePluginMDE.Tests.Formats.Xmp
 {
 	/// <summary>Unit tests for <see cref="XmpWriter"/>.</summary>
 	/// <author>Michael Osthege</author>
 	public sealed class XmpWriterTest
-    {
-        [Fact]
-        public void TestEncodeXmpToPayloadBytes()
-        {
+	{
+		[Fact]
+		public void TestEncodeXmpToPayloadBytes()
+		{
 			SerializeOptions options = new SerializeOptions
 			{
 				UseCanonicalFormat = true,
@@ -46,82 +47,82 @@ namespace MetadataExtractor.Tests.Formats.Xmp
 			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
 			byte[] payloadBytes = XmpMetaFactory.SerializeToBuffer(xmp, options);
 			JpegSegmentPlugin app1 = new JpegSegmentPlugin(JpegSegmentType.App1, payloadBytes, offset: 0);
-            JpegFragment frag = JpegFragment.FromJpegSegment(app1);
+			JpegFragment frag = JpegFragment.FromJpegSegment(app1);
 
 			byte[] expected = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmpReencoded.app1");
 
-            Assert.Equal(expected.Length, frag.Bytes.Length);
-            Assert.True(frag.Bytes.SequenceEqual(expected));
-        }
+			Assert.Equal(expected.Length, frag.Bytes.Length);
+			Assert.True(frag.Bytes.SequenceEqual(expected));
+		}
 
 		[Fact]
-        public void TestUpdateFragments_Replace()
-        {
-            // substitute the original with re-encoded Xmp content
-            List<JpegFragment> originalFragments = null;
-            using (var stream = TestDataUtil.OpenRead("Data/xmpWriting_PictureWithMicrosoftXmp.jpg"))
-                originalFragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
-            XDocument xmp = XDocument.Parse(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
-            byte[] originalApp1 = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmp.app1");
-            byte[] expectedApp1 = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmpReencoded.app1");
+		public void TestUpdateFragments_Replace()
+		{
+			// substitute the original with re-encoded Xmp content
+			List<JpegFragment> originalFragments = null;
+			using (var stream = TestDataUtil.OpenRead("Data/xmpWriting_PictureWithMicrosoftXmp.jpg"))
+				originalFragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
+			XDocument xmp = XDocument.Parse(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
+			byte[] originalApp1 = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmp.app1");
+			byte[] expectedApp1 = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmpReencoded.app1");
 
-            var writer = new XmpWriter();
-            var updatedFragments = writer.UpdateFragments(originalFragments, xmp);
+			var writer = new XmpWriter();
+			var updatedFragments = writer.UpdateFragments(originalFragments, xmp);
 
-            Assert.Equal(originalFragments.Count, updatedFragments.Count);
-            // Check that only the App1 Xmp fragment is modified
-            for (int i = 0; i < originalFragments.Count; i++)
-            {
-                var ofrag = originalFragments[i];
-                var ufrag = updatedFragments[i];
+			Assert.Equal(originalFragments.Count, updatedFragments.Count);
+			// Check that only the App1 Xmp fragment is modified
+			for (int i = 0; i < originalFragments.Count; i++)
+			{
+				var ofrag = originalFragments[i];
+				var ufrag = updatedFragments[i];
 
-                if (ofrag.Segment?.Type == JpegSegmentType.App1 && ofrag.Bytes.SequenceEqual(originalApp1))
-                {
-                    // If this fragment is the original Xmp fragment, we expect the updated fragment
-                    Assert.True(ufrag.Bytes.SequenceEqual(expectedApp1));
-                }
-                else
-                {
-                    // In all other cases, the fragments must remain identical
-                    Assert.True(ufrag.Bytes.SequenceEqual(ofrag.Bytes));
-                }
-            }
-        }
+				if (ofrag.Segment?.Type == JpegSegmentType.App1 && ofrag.Bytes.SequenceEqual(originalApp1))
+				{
+					// If this fragment is the original Xmp fragment, we expect the updated fragment
+					Assert.True(ufrag.Bytes.SequenceEqual(expectedApp1));
+				}
+				else
+				{
+					// In all other cases, the fragments must remain identical
+					Assert.True(ufrag.Bytes.SequenceEqual(ofrag.Bytes));
+				}
+			}
+		}
 
-        [Fact]
-        public void TestUpdateFragments_Insert()
-        {
-            // substitute the original with re-encoded Xmp content
-            List<JpegFragment> originalFragments = null;
-            using (var stream = TestDataUtil.OpenRead("Data/xmpWriting_PictureWithoutXmp.jpg"))
-                originalFragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
-            XDocument xmp = XDocument.Parse(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
-            byte[] originalApp1 = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmp.app1");
-            byte[] expectedApp1 = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmpReencoded.app1");
+		[Fact]
+		public void TestUpdateFragments_Insert()
+		{
+			// substitute the original with re-encoded Xmp content
+			List<JpegFragment> originalFragments = null;
+			using (var stream = TestDataUtil.OpenRead("Data/xmpWriting_PictureWithoutXmp.jpg"))
+				originalFragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
+			XDocument xmp = XDocument.Parse(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
+			byte[] originalApp1 = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmp.app1");
+			byte[] expectedApp1 = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmpReencoded.app1");
 
-            var writer = new XmpWriter();
-            var updatedFragments = writer.UpdateFragments(originalFragments, xmp);
+			var writer = new XmpWriter();
+			var updatedFragments = writer.UpdateFragments(originalFragments, xmp);
 
-            Assert.True(updatedFragments.Count == originalFragments.Count + 1);
-            // Check that only the App1 Xmp fragment is modified
-            bool foundInsertedFragment = false;
-            for (int i = 0; i < originalFragments.Count; i++)
-            {
-                // for all fragments after the inserted App1, the previous original fragment must be selected
-                var ofrag = originalFragments[(foundInsertedFragment ? i - 1 : i)];
-                var ufrag = updatedFragments[i];
+			Assert.True(updatedFragments.Count == originalFragments.Count + 1);
+			// Check that only the App1 Xmp fragment is modified
+			bool foundInsertedFragment = false;
+			for (int i = 0; i < originalFragments.Count; i++)
+			{
+				// for all fragments after the inserted App1, the previous original fragment must be selected
+				var ofrag = originalFragments[foundInsertedFragment ? i - 1 : i];
+				var ufrag = updatedFragments[i];
 
-                if (ufrag.Bytes.SequenceEqual(expectedApp1))
-                {
-                    foundInsertedFragment = true;
-                }
-                else
-                {
-                    // In all other cases, the fragments must remain identical
-                    Assert.True(ufrag.Bytes.SequenceEqual(ofrag.Bytes));
-                }
-            }
-            Assert.True(foundInsertedFragment);
-        }
-    }
+				if (ufrag.Bytes.SequenceEqual(expectedApp1))
+				{
+					foundInsertedFragment = true;
+				}
+				else
+				{
+					// In all other cases, the fragments must remain identical
+					Assert.True(ufrag.Bytes.SequenceEqual(ofrag.Bytes));
+				}
+			}
+			Assert.True(foundInsertedFragment);
+		}
+	}
 }

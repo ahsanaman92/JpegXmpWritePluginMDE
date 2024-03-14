@@ -23,9 +23,10 @@
 #endregion
 
 using JetBrains.Annotations;
+using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Xmp;
+
 #if !PORTABLE
 using MetadataExtractor.Formats.FileSystem;
-using MetadataExtractor.Formats.Jpeg;
 
 #endif
 using MetadataExtractor.Formats.Xmp;

@@ -26,17 +26,19 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
+
+
 #if NET35
 using FragmentList = System.Collections.Generic.IList<MetadataExtractor.Formats.Jpeg.JpegFragment>;
 #else
-using FragmentList = System.Collections.Generic.IReadOnlyList<MetadataExtractor.Formats.Jpeg.JpegFragment>;
+using FragmentList = System.Collections.Generic.IReadOnlyList<JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg.JpegFragment>;
 #endif
 
-namespace MetadataExtractor.Formats.Jpeg
+namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 {
-    /// <summary>Defines the interface of an object that can update a list of JpegFragments with new metadata.</summary>
-    public interface IJpegFragmentMetadataWriter
-    {
+	/// <summary>Defines the interface of an object that can update a list of JpegFragments with new metadata.</summary>
+	public interface IJpegFragmentMetadataWriter
+	{
 		/// <summary>The IXmpMeta type of metadata that this writer can process.</summary>
 		[NotNull]
 		Type MetadataXmpMetaType { get; }
@@ -49,6 +51,6 @@ namespace MetadataExtractor.Formats.Jpeg
 		/// A directory containing metadata that shall be written to the JpegFragments.
 		/// </param>
 		[NotNull]
-        List<JpegFragment> UpdateFragments([NotNull] FragmentList fragments, [NotNull] object metadata);
-    }
+		List<JpegFragment> UpdateFragments([NotNull] FragmentList fragments, [NotNull] object metadata);
+	}
 }

@@ -22,76 +22,77 @@
 //
 #endregion
 
+using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.IO;
 using Xunit;
 
-namespace MetadataExtractor.Tests.Formats.Jpeg
+namespace JpegXmpWritePluginMDE.Tests.Formats.Jpeg
 {
 	/// <summary>Unit tests for <see cref="JpegFragment"/>.</summary>
 	/// <author>Michael Osthege</author>
 	public sealed class JpegFragmentTest
-    {
+	{
 
-        [Fact]
-        public void TestSplitSingleFragment()
-        {
-            // The test file contains exactly one App1 XMP segment (marker, size, payload)
-            string pathApp1 = "Data/xmpWriting_MicrosoftXmp.app1";
+		[Fact]
+		public void TestSplitSingleFragment()
+		{
+			// The test file contains exactly one App1 XMP segment (marker, size, payload)
+			string pathApp1 = "Data/xmpWriting_MicrosoftXmp.app1";
 
-            List<JpegFragment> fragments;
-            using (var stream = TestDataUtil.OpenRead(pathApp1))
-                fragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
-            byte[] fileBytes = TestDataUtil.GetBytes(pathApp1);
+			List<JpegFragment> fragments;
+			using (var stream = TestDataUtil.OpenRead(pathApp1))
+				fragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
+			byte[] fileBytes = TestDataUtil.GetBytes(pathApp1);
 
-            Assert.Single(fragments);
-            Assert.True(fragments.First().Bytes.SequenceEqual(fileBytes));
-            Assert.NotNull(fragments.First().Segment);
-            Assert.Equal(JpegSegmentType.App1, fragments.First().Segment.Type);
-        }
+			Assert.Single(fragments);
+			Assert.True(fragments.First().Bytes.SequenceEqual(fileBytes));
+			Assert.NotNull(fragments.First().Segment);
+			Assert.Equal(JpegSegmentType.App1, fragments.First().Segment.Type);
+		}
 
-        [Fact]
-        public void TestFindsFragment()
-        {
-            // The file is an image that contains an App1 Xmp segment
-            string pathJpeg = "Data/xmpWriting_PictureWithMicrosoftXmp.jpg";
-            string pathApp1 = "Data/xmpWriting_MicrosoftXmp.app1";
+		[Fact]
+		public void TestFindsFragment()
+		{
+			// The file is an image that contains an App1 Xmp segment
+			string pathJpeg = "Data/xmpWriting_PictureWithMicrosoftXmp.jpg";
+			string pathApp1 = "Data/xmpWriting_MicrosoftXmp.app1";
 
-            List<JpegFragment> fragments;
-            using (var stream = TestDataUtil.OpenRead(pathJpeg))
-                fragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
-            byte[] xmpFragmentBytes = TestDataUtil.GetBytes(pathApp1);
+			List<JpegFragment> fragments;
+			using (var stream = TestDataUtil.OpenRead(pathJpeg))
+				fragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
+			byte[] xmpFragmentBytes = TestDataUtil.GetBytes(pathApp1);
 
-            bool foundXmpFragment = false;
-            foreach (var fragment in fragments)
-            {
-                if (fragment.Bytes.Length == xmpFragmentBytes.Length)
-                {
-                    Assert.True(fragment.Bytes.SequenceEqual(xmpFragmentBytes));
-                    foundXmpFragment = true;
-                }
-            }
-            Assert.True(foundXmpFragment, "The Xmp App1 fragment was not found correctly.");
-        }
+			bool foundXmpFragment = false;
+			foreach (var fragment in fragments)
+			{
+				if (fragment.Bytes.Length == xmpFragmentBytes.Length)
+				{
+					Assert.True(fragment.Bytes.SequenceEqual(xmpFragmentBytes));
+					foundXmpFragment = true;
+				}
+			}
+			Assert.True(foundXmpFragment, "The Xmp App1 fragment was not found correctly.");
+		}
 
-        [Fact]
-        public void TestSplitConcatenation()
-        {
-            // The file is an image that contains an App1 Xmp segment
-            string pathJpeg = "Data/xmpWriting_PictureWithMicrosoftXmp.jpg";
+		[Fact]
+		public void TestSplitConcatenation()
+		{
+			// The file is an image that contains an App1 Xmp segment
+			string pathJpeg = "Data/xmpWriting_PictureWithMicrosoftXmp.jpg";
 
-            List<JpegFragment> fragments;
-            using (var stream = TestDataUtil.OpenRead(pathJpeg))
-                fragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
-            byte[] original = File.ReadAllBytes(pathJpeg);
+			List<JpegFragment> fragments;
+			using (var stream = TestDataUtil.OpenRead(pathJpeg))
+				fragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
+			byte[] original = File.ReadAllBytes(pathJpeg);
 
-            int nRead = fragments.Select(f => f.Bytes.Length).Sum();
-            byte[] joined = JpegFragmentWriter.JoinFragments(fragments).ToArray();
+			int nRead = fragments.Select(f => f.Bytes.Length).Sum();
+			byte[] joined = JpegFragmentWriter.JoinFragments(fragments).ToArray();
 
-            Assert.Equal(original.Length, nRead);
-            Assert.Equal(original.Length, joined.Length);
-            Assert.True(original.SequenceEqual(joined));
-        }
+			Assert.Equal(original.Length, nRead);
+			Assert.Equal(original.Length, joined.Length);
+			Assert.True(original.SequenceEqual(joined));
+		}
 
-    }
+	}
 }
