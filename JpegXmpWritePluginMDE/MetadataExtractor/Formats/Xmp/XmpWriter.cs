@@ -3,6 +3,9 @@ using MetadataExtractor.Formats.Jpeg;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using XmpCore;
+using XmpCore.Impl;
+using XmpCore.Options;
 
 #if NET35
 using FragmentList = System.Collections.Generic.IList<MetadataExtractor.Formats.Jpeg.JpegFragment>;
@@ -17,40 +20,40 @@ namespace MetadataExtractor.Formats.Xmp
         /// <summary>
         /// Specifies the type of metadata that this MetadataWriter can handle.
         /// </summary>
-        Type IJpegFragmentMetadataWriter.MetadataType => typeof(XmpDirectory);
+        Type IJpegFragmentMetadataWriter.MetadataXmpMetaType => typeof(XmpMeta);
 
-        /// <summary>
-        /// Updates a list of JpegFragments with new metadata.
-        /// <para>
-        /// An existing App1 Xmp fragment will be updated. If none is found, a new segment will be
-        /// inserted before the first fragment that is not one of {Soi, App0, App1}
-        /// </para>
-        /// </summary>
-        /// <param name="fragments">Original file fragmets</param>
-        /// <param name="metadata">The Xmp metadata that shall be written</param>
-        /// <returns>A new list of JpegFragments</returns>
-        public List<JpegFragment> UpdateFragments([NotNull] FragmentList fragments, [NotNull] object metadata)
-        {
-            JpegFragment metadataFragment;
-            List<JpegFragment> output = new List<JpegFragment>();
-            bool wroteData = false;
-            int insertPosition = 0;
+		/// <summary>
+		/// Updates a list of JpegFragments with new metadata.
+		/// <para>
+		/// An existing App1 Xmp fragment will be updated. If none is found, a new segment will be
+		/// inserted before the first fragment that is not one of {Soi, App0, App1}
+		/// </para>
+		/// </summary>
+		/// <param name="fragments">Original file fragmets</param>
+		/// <param name="metadata">The Xmp metadata that shall be written</param>
+		/// <returns>A new list of JpegFragments</returns>
+		public List<JpegFragment> UpdateFragments([NotNull] FragmentList fragments, [NotNull] object metadata)
+		{
+			JpegFragment metadataFragment;
+			List<JpegFragment> output = new List<JpegFragment>();
+			bool wroteData = false;
+			int insertPosition = 0;
 
-            if (metadata is XDocument)
-            {
-                byte[] payloadBytes = EncodeXmpToPayloadBytes((XDocument)metadata);
-                JpegSegmentPlugin metadataSegment = new JpegSegmentPlugin(JpegSegmentType.App1, payloadBytes, offset: 0);
-                metadataFragment = JpegFragment.FromJpegSegment(metadataSegment);
-            }
-            else
-            {
-                throw new ArgumentException($"XmpWriter expects metadata to be of type XmpDirectory, but was given {metadata.GetType()}.");
-            }
+			if (metadata is IXmpMeta xmpMeta)
+			{
+				byte[] payloadBytes = XmpMetaFactory.SerializeToBuffer(xmpMeta, new SerializeOptions());
+				JpegSegmentPlugin metadataSegment = new JpegSegmentPlugin(JpegSegmentType.App1, payloadBytes, offset: 0);
+				metadataFragment = JpegFragment.FromJpegSegment(metadataSegment);
+			}
+			else
+			{
+				throw new ArgumentException($"XmpWriter expects metadata to be of type IXmpMeta, but was given {metadata.GetType()}.");
+			}
 
-            // First look for any potential Xmp fragment, insert only if none is found
+			// First look for any potential Xmp fragment, insert only if none is found
 
-            // Walk over existing fragment and replace or insert the new metadata fragment
-            for (int i = 0; i < fragments.Count; i++)
+			// Walk over existing fragment and replace or insert the new metadata fragment
+			for (int i = 0; i < fragments.Count; i++)
             {
                 JpegFragment currentFragment = fragments[i];
 
@@ -129,13 +132,13 @@ namespace MetadataExtractor.Formats.Xmp
 
             return xmpMS.ToArray();
         }
-
-        /// <summary>
-        /// Creates a string of whitespace with linebreaks for padding within xpacket.
-        /// </summary>
-        /// <param name="size">Desired total size of whitespace</param>
-        /// <returns>String of whitespace with newline character in each line of 100 chars</returns>
-        public static string CreateWhitespace(int size=4096)
+		
+		/// <summary>
+		/// Creates a string of whitespace with linebreaks for padding within xpacket.
+		/// </summary>
+		/// <param name="size">Desired total size of whitespace</param>
+		/// <returns>String of whitespace with newline character in each line of 100 chars</returns>
+		public static string CreateWhitespace(int size=4096)
         {
             var line = '\u000A' + new String('\u0020', 99);
             return string.Concat(Enumerable.Repeat(line, (int)Math.Ceiling(size / 100.0))).Substring(0, size);

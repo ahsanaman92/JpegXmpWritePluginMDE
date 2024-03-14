@@ -37,18 +37,18 @@ namespace MetadataExtractor.Formats.Jpeg
     /// <summary>Defines the interface of an object that can update a list of JpegFragments with new metadata.</summary>
     public interface IJpegFragmentMetadataWriter
     {
-        /// <summary>The type of metadata that this writer can process.</summary>
-        [NotNull]
-        Type MetadataType { get; }
+		/// <summary>The IXmpMeta type of metadata that this writer can process.</summary>
+		[NotNull]
+		Type MetadataXmpMetaType { get; }
 
-        /// <summary>Modifies the JpegFragment collection with the metadata update.</summary>
-        /// <param name="fragments">
-        /// A sequence of JPEG fragments to which the metadata should be written. These are in the order encountered in the original file.
-        /// </param>
-        /// <param name="metadata">
-        /// A directory containing metadata that shall be written to the JpegFragments.
-        /// </param>
-        [NotNull]
+		/// <summary>Modifies the JpegFragment collection with the metadata update.</summary>
+		/// <param name="fragments">
+		/// A sequence of JPEG fragments to which the metadata should be written. These are in the order encountered in the original file.
+		/// </param>
+		/// <param name="metadata">
+		/// A directory containing metadata that shall be written to the JpegFragments.
+		/// </param>
+		[NotNull]
         List<JpegFragment> UpdateFragments([NotNull] FragmentList fragments, [NotNull] object metadata);
     }
 }

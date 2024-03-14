@@ -23,36 +23,37 @@
 #endregion
 
 using JetBrains.Annotations;
+using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg;
+
 #if !PORTABLE
 using MetadataExtractor.Formats.FileSystem;
 #endif
-using MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.Util;
 
 namespace MetadataExtractor
 {
-    /// <summary>Writes metadata to any supported file format.</summary>
-    /// <remarks>
-    /// This class a lightweight wrapper around other, specific metadata processors.
-    /// During saving, the file type is determined from the first few bytes of the existing file.
-    /// Writing is then delegated to one of:
-    ///
-    /// <list type="bullet">
-    ///   <item><see cref="JpegMetadataWriter"/> for JPEG files</item>
-    ///   <item>Writing to other file types is currently not implemented. Feel free to contribute!</item>
-    /// </list>
-    ///
-    /// If you know the file type you're working with, you may use one of the above processors directly.
-    /// For most scenarios it is simpler, more convenient and more robust to use this class.
-    /// <para />
-    /// <see cref="FileTypeDetector"/> is used to determine the provided image's file type, and therefore
-    /// the appropriate metadata reader to use.
-    /// </remarks>
-    /// <author>Michael Osthege</author>
-    /// <exception cref="ImageProcessingException">on unsupported file types</exception>
-    public static class ImageMetadataWriter
+	/// <summary>Writes metadata to any supported file format.</summary>
+	/// <remarks>
+	/// This class a lightweight wrapper around other, specific metadata processors.
+	/// During saving, the file type is determined from the first few bytes of the existing file.
+	/// Writing is then delegated to one of:
+	///
+	/// <list type="bullet">
+	///   <item><see cref="JpegMetadataWriter"/> for JPEG files</item>
+	///   <item>Writing to other file types is currently not implemented. Feel free to contribute!</item>
+	/// </list>
+	///
+	/// If you know the file type you're working with, you may use one of the above processors directly.
+	/// For most scenarios it is simpler, more convenient and more robust to use this class.
+	/// <para />
+	/// <see cref="FileTypeDetector"/> is used to determine the provided image's file type, and therefore
+	/// the appropriate metadata reader to use.
+	/// </remarks>
+	/// <author>Michael Osthege</author>
+	/// <exception cref="ImageProcessingException">on unsupported file types</exception>
+	public static class ImageMetadataWriter
     {
-        /// <summary>Writes metadata to a <see cref="Stream"/>.</summary>
+                /// <summary>Writes metadata to a <see cref="Stream"/>.</summary>
         /// <param name="stream">A stream to which the file data may be written.  The stream must be positioned at the beginning of the file's data.</param>
         /// <param name="metadata">Collection of metadata objects.</param>
         /// <exception cref="ImageProcessingException">The file type is unknown, or processing errors occurred.</exception>
