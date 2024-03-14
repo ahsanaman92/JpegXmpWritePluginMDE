@@ -95,53 +95,5 @@ namespace MetadataExtractor.Formats.Xmp
 
             return output;
         }
-
-        /// <summary>
-        /// Encodes an XDocument to bytes to be used as the payload of an App1 segment.
-        /// </summary>
-        /// <param name="xmpDoc">Xmp document to be encoded</param>
-        /// <param name="writeable">Indicates if the Xmp packet shall be marked as writable.</param>
-        /// <returns>App1 segment payload</returns>
-        public static byte[] EncodeXmpToPayloadBytes([NotNull] XDocument xmpDoc, bool writeable=true)
-        {
-            // constant parts
-			byte[] preamble = Encoding.UTF8.GetBytes(Encoding.UTF8.GetString(XmpReader.JpegSegmentPreamble.ToArray()));
-            byte[] xpacketHeader = Encoding.UTF8.GetBytes("<?xpacket begin=\"\uFEFF\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>");
-            byte[] xpacketTrailer = Encoding.UTF8.GetBytes($"<?xpacket end='{ (writeable ? 'w' : 'r') }'?>");
-
-            MemoryStream xmpMS = new MemoryStream();
-            // 1. preamble "http://ns.adobe.com/xap/1.0/\0"
-            xmpMS.Write(preamble, 0, preamble.Length);
-
-            // 2. xpacket header
-            xmpMS.Write(xpacketHeader, 0, xpacketHeader.Length);
-
-            // 3. serialized Xmp xml
-            XmlWriterSettings settings = new XmlWriterSettings() { OmitXmlDeclaration = true };
-            using (XmlWriter xmlWriter = XmlWriter.Create(xmpMS, settings))
-            {
-                xmpDoc.WriteTo(xmlWriter);
-            }
-
-            // 4. whitespace padding
-            byte[] whitespace = Encoding.UTF8.GetBytes(CreateWhitespace());
-            xmpMS.Write(whitespace, 0, whitespace.Length);
-
-            // 5. xpacket trailer
-            xmpMS.Write(xpacketTrailer, 0, xpacketTrailer.Length);
-
-            return xmpMS.ToArray();
-        }
-		
-		/// <summary>
-		/// Creates a string of whitespace with linebreaks for padding within xpacket.
-		/// </summary>
-		/// <param name="size">Desired total size of whitespace</param>
-		/// <returns>String of whitespace with newline character in each line of 100 chars</returns>
-		public static string CreateWhitespace(int size=4096)
-        {
-            var line = '\u000A' + new String('\u0020', 99);
-            return string.Concat(Enumerable.Repeat(line, (int)Math.Ceiling(size / 100.0))).Substring(0, size);
-        }
     }
 }
