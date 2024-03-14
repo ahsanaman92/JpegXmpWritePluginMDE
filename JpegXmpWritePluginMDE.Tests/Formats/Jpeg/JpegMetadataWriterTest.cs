@@ -21,21 +21,17 @@
 //    https://drewnoakes.com/code/exif/
 //
 #endregion
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using MetadataExtractor.Formats.Exif;
+using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.IO;
+using System.Xml.Linq;
 using Xunit;
 
 namespace MetadataExtractor.Tests.Formats.Jpeg
 {
-    /// <summary>Unit tests for <see cref="JpegMetadataWriter"/>.</summary>
-    /// <author>Michael Osthege</author>
-    public sealed class JpegMetadataWriterTest
+	/// <summary>Unit tests for <see cref="JpegMetadataWriter"/>.</summary>
+	/// <author>Michael Osthege</author>
+	public sealed class JpegMetadataWriterTest
     {
         /// <summary>
         /// This test is very similar to <see cref="MetadataExtractor.Tests.Formats.Xmp.XmpWriterTest.TestUpdateFragments_Replace"/>
