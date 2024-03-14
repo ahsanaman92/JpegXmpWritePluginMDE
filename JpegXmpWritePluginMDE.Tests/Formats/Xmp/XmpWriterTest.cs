@@ -22,37 +22,39 @@
 //
 #endregion
 
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
 using MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.Formats.Xmp;
 using MetadataExtractor.IO;
+using System.Xml.Linq;
+using XmpCore;
+using XmpCore.Options;
 using Xunit;
 
 namespace MetadataExtractor.Tests.Formats.Xmp
 {
-    /// <summary>Unit tests for <see cref="XmpWriter"/>.</summary>
-    /// <author>Michael Osthege</author>
-    public sealed class XmpWriterTest
+	/// <summary>Unit tests for <see cref="XmpWriter"/>.</summary>
+	/// <author>Michael Osthege</author>
+	public sealed class XmpWriterTest
     {
         [Fact]
         public void TestEncodeXmpToPayloadBytes()
         {
-            XDocument xmp = XDocument.Parse(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
-            byte[] payloadBytes = XmpWriter.EncodeXmpToPayloadBytes(xmp);
-            JpegSegmentPlugin app1 = new JpegSegmentPlugin(JpegSegmentType.App1, payloadBytes, offset: 0);
+			SerializeOptions options = new SerializeOptions
+			{
+				UseCanonicalFormat = true,
+			};
+			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
+			byte[] payloadBytes = XmpMetaFactory.SerializeToBuffer(xmp, options);
+			JpegSegmentPlugin app1 = new JpegSegmentPlugin(JpegSegmentType.App1, payloadBytes, offset: 0);
             JpegFragment frag = JpegFragment.FromJpegSegment(app1);
 
-            byte[] expected = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmpReencoded.app1");
+			byte[] expected = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmpReencoded.app1");
 
             Assert.Equal(expected.Length, frag.Bytes.Length);
             Assert.True(frag.Bytes.SequenceEqual(expected));
         }
 
-        [Fact]
+		[Fact]
         public void TestUpdateFragments_Replace()
         {
             // substitute the original with re-encoded Xmp content
@@ -120,13 +122,6 @@ namespace MetadataExtractor.Tests.Formats.Xmp
                 }
             }
             Assert.True(foundInsertedFragment);
-        }
-
-        [Fact]
-        public void TestCreateWhitespace()
-        {
-            string created = XmpWriter.CreateWhitespace(size: 12345);
-            Assert.Equal(12345, created.Length);
         }
     }
 }

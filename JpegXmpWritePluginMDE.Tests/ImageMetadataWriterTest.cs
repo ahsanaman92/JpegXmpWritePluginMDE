@@ -21,35 +21,28 @@
 //    https://drewnoakes.com/code/exif/
 //
 #endregion
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using MetadataExtractor.Formats.Exif;
-using MetadataExtractor.Formats.Jpeg;
-using MetadataExtractor.IO;
+using XmpCore;
 using Xunit;
 
 namespace MetadataExtractor.Tests
 {
-    /// <summary>Unit tests for <see cref="ImageMetadataWriter"/>.</summary>
-    /// <author>Michael Osthege</author>
-    public sealed class ImageMetadataWriterTest
+	/// <summary>Unit tests for <see cref="ImageMetadataWriter"/>.</summary>
+	/// <author>Michael Osthege</author>
+	public sealed class ImageMetadataWriterTest
     {
         [Fact]
         public void TestWriteImageMetadata()
         {
             var originalStream = TestDataUtil.OpenRead("Data/xmpWriting_PictureWithMicrosoftXmp.jpg");
-            XDocument xmp = XDocument.Parse(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
-            byte[] expectedResult = TestDataUtil.GetBytes("Data/xmpWriting_PictureWithMicrosoftXmpReencoded.jpg");
+			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
+			byte[] expectedResult = TestDataUtil.GetBytes("Data/xmpWriting_PictureWithMicrosoftXmpReencoded.jpg");
 
-            var metadata_objects = new object[] { xmp };
+			var metadata_objects = new object[] { xmp };
             var updatedStream = ImageMetadataWriter.WriteMetadata(originalStream, metadata_objects);
 
-            var actualResult = updatedStream.ToArray();
+                var actualResult = updatedStream.ToArray();
 
             Assert.True(actualResult.SequenceEqual(expectedResult));
-        }
-    }
+		}
+	}
 }
