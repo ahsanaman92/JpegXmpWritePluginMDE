@@ -76,6 +76,12 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 					// Read bytes into the buffer
 					// Find the segment marker. Markers are zero or more 0xFF bytes, followed
 					// by a 0xFF and then a byte not equal to 0x00 or 0xFF.
+
+					// Check if we are going to have an exception reading the next byte, if so, break out
+					if (reader.IsCloserToEnd(1))
+					{
+						break;
+					}
 					var segmentIdentifier = reader.GetByte();
 					buffer.WriteByte(segmentIdentifier);
 					var segmentTypeByte = reader.GetByte();
@@ -122,13 +128,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 					// All buffer contents have been copied into fragments
 					buffer = new MemoryStream();
 				}
-			}
-			catch (IOException ex)
-			{
-				// we expect a IOException when the sequential reader reaches the end of the original data
-				if (ex.Message != "End of data reached.")
-					throw new JpegProcessingException("An error occured while trying to write Xml to the buffer.", ex);
-
+				// We have broken out of while loop
 				// The remaining buffer must also be collected.
 				if (buffer.Length > 0)
 				{
