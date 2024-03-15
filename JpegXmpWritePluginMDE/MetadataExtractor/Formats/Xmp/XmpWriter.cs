@@ -43,7 +43,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Xmp
 
 			if (metadata is IXmpMeta xmpMeta)
 			{
-				byte[] payloadBytes = XmpMetaFactory.SerializeToBuffer(xmpMeta, new SerializeOptions());
+				byte[] payloadBytes = WritePreambleToXmpBytes(xmpMeta);
 				JpegSegmentPlugin metadataSegment = new JpegSegmentPlugin(JpegSegmentType.App1, payloadBytes, offset: 0);
 				metadataFragment = JpegFragment.FromJpegSegment(metadataSegment);
 			}
@@ -96,6 +96,27 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Xmp
 			}
 
 			return output;
+		}
+		/// <summary>
+		/// Calls SerializeToBuffer on IXmpMeta object to encode bytes to be used as the payload of an App1 segment.
+		/// </summary>
+		/// <param name="xmpMeta">Xmp document to be encoded</param>
+		/// <returns>App1 segment payload</returns>
+		public static byte[] WritePreambleToXmpBytes([NotNull] IXmpMeta xmpMeta)
+		{
+			// xmp preamble
+			byte[] preamble = Encoding.UTF8.GetBytes(Encoding.UTF8.GetString(XmpReader.JpegSegmentPreamble.ToArray()));
+			// xmpMeta object serialized
+			byte[] xmpMetaBytes = XmpMetaFactory.SerializeToBuffer(xmpMeta, new SerializeOptions());
+
+			MemoryStream xmpMS = new MemoryStream();
+			// 1. preamble "http://ns.adobe.com/xap/1.0/\0"
+			xmpMS.Write(preamble, 0, preamble.Length);
+
+			// 2. xmpMeta 
+			xmpMS.Write(xmpMetaBytes, 0, xmpMetaBytes.Length);
+
+			return xmpMS.ToArray();
 		}
 	}
 }
