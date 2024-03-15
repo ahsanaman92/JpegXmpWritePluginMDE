@@ -38,14 +38,10 @@ namespace JpegXmpWritePluginMDE.Tests.Formats.Xmp
 	public sealed class XmpWriterTest
 	{
 		[Fact]
-		public void TestEncodeXmpToPayloadBytes()
+		public void TestWritePreambleToXmpBytes()
 		{
-			SerializeOptions options = new SerializeOptions
-			{
-				UseCanonicalFormat = true,
-			};
 			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
-			byte[] payloadBytes = XmpMetaFactory.SerializeToBuffer(xmp, options);
+			byte[] payloadBytes = XmpWriter.WritePreambleToXmpBytes(xmp);
 			JpegSegmentPlugin app1 = new JpegSegmentPlugin(JpegSegmentType.App1, payloadBytes, offset: 0);
 			JpegFragment frag = JpegFragment.FromJpegSegment(app1);
 

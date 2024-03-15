@@ -37,7 +37,7 @@ namespace JpegXmpWritePluginMDE.Tests
 			var originalStream = TestDataUtil.OpenRead("Data/xmpWriting_PictureWithMicrosoftXmp.jpg");
 			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
 			byte[] expectedResult = TestDataUtil.GetBytes("Data/xmpWriting_PictureWithMicrosoftXmpReencoded.jpg");
-
+			
 			var metadata_objects = new object[] { xmp };
 			var updatedStream = ImageMetadataWriter.WriteMetadata(originalStream, metadata_objects);
 
