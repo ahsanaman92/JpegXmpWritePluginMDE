@@ -62,7 +62,7 @@ namespace JpegXmpWritePluginMDE.Tests.Formats.Xmp
 			List<JpegFragment> originalFragments = null;
 			using (var stream = TestDataUtil.OpenRead("Data/xmpWriting_PictureWithMicrosoftXmp.jpg"))
 				originalFragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
-			XDocument xmp = XDocument.Parse(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
+			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
 			byte[] originalApp1 = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmp.app1");
 			byte[] expectedApp1 = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmpReencoded.app1");
 
@@ -96,7 +96,7 @@ namespace JpegXmpWritePluginMDE.Tests.Formats.Xmp
 			List<JpegFragment> originalFragments = null;
 			using (var stream = TestDataUtil.OpenRead("Data/xmpWriting_PictureWithoutXmp.jpg"))
 				originalFragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
-			XDocument xmp = XDocument.Parse(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
+			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
 			byte[] originalApp1 = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmp.app1");
 			byte[] expectedApp1 = File.ReadAllBytes("Data/xmpWriting_MicrosoftXmpReencoded.app1");
 
