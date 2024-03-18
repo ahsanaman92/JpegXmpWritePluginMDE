@@ -10,7 +10,6 @@
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations"/>
     <PackageReference Include="MetadataExtractor"/>
-    <PackageReference Include="xunit.assert"/>
   </ItemGroup>
 
 </Project>
