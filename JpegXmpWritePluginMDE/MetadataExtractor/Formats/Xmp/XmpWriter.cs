@@ -105,7 +105,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Xmp
 		public static byte[] WritePreambleToXmpBytes([NotNull] IXmpMeta xmpMeta)
 		{
 			// xmp preamble
-			byte[] preamble = Encoding.UTF8.GetBytes(Encoding.UTF8.GetString(XmpReader.JpegSegmentPreamble.ToArray()));
+			byte[] preamble = XmpReader.JpegSegmentPreamble.ToArray();
 			// xmpMeta object serialized
 			byte[] xmpMetaBytes = XmpMetaFactory.SerializeToBuffer(xmpMeta, new SerializeOptions());
 
