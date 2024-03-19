@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations"/>
-    <PackageReference Include="MetadataExtractor"/>
+    <PackageReference Include="JetBrains.Annotations" PrivateAssets="All"/>
+    <PackageReference Include="MetadataExtractor" PrivateAssets="All"/>
   </ItemGroup>
 
 </Project>
