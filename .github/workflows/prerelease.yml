@@ -1,0 +1,20 @@
+name: prerelease
+on:
+  release:
+    types: [prereleased]
+
+jobs:
+ windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Get version from release
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> "$GITHUB_OUTPUT"
+      shell: bash
+    - run: echo ${{ steps.get_version.outputs.VERSION }}
+    - run: dotnet pack JpegXmpWritePluginMDE/JpegXmpWritePluginMDE.csproj -o . -c Release /p:Version=${{ steps.get_version.outputs.VERSION }}
+    - run: dotnet nuget push *.nupkg -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
+      env:
+        NUGET_API_KEY: ${{ secrets.NuGetAPIKey }}
+      shell: bash
