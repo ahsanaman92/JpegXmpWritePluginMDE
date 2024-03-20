@@ -1,0 +1,23 @@
+<Project>
+  <!-- Enable central package version management -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <!-- Setup tools to be installed in all projects -->
+  <ItemGroup>
+    <!-- Built into the .NET 8 SDK -->
+    <!-- <GlobalPackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="1.1.1" /> -->
+  </ItemGroup>
+  <!-- Centrally defined package versions -->
+  <ItemGroup>
+    <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
+    <PackageVersion Include="MetadataExtractor" Version="2.9.0-rc1" />
+    <PackageVersion Include="xunit.assert" Version="2.7.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.0" />
+    <PackageVersion Include="xunit" Version="2.7.0" />
+    <PackageVersion Include="xunit.analyzers" Version="1.11.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.7" />
+  </ItemGroup>
+</Project>
