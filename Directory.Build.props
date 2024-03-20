@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- common NuGet package settings-->
+	<PropertyGroup>
+		<Authors>Michael Osthege;Ahsan Cheema</Authors>
+		<PackageProjectUrl>https://github.com/ahsanaman92/JpegXmpWritePluginMDE</PackageProjectUrl>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/drewnoakes/JpegXmpWritePluginMDE.git</RepositoryUrl>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<IncludeSource>true</IncludeSource>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	</PropertyGroup>
+
+	<!-- common build properties -->
+	<PropertyGroup>
+		<VersionNumber Condition=" '$(Version)'=='' ">2.9.0</VersionNumber>
+		<NuGetAudit>enable</NuGetAudit>
+		<NuGetAuditMode>all</NuGetAuditMode>
+		<UseArtifactsOutput>true</UseArtifactsOutput>
+		<WarningLevel>5</WarningLevel>
+	</PropertyGroup>
+
+</Project>
