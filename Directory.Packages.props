@@ -12,7 +12,7 @@
   <!-- Centrally defined package versions -->
   <ItemGroup>
     <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
-    <PackageVersion Include="MetadataExtractor" Version="2.9.0-rc1" />
+    <PackageVersion Include="MetadataExtractor" Version="2.9.0-rc2" />
     <PackageVersion Include="xunit.assert" Version="2.7.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
