@@ -1,11 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+
+	  <Description>Plugin to metadata-extractor-dotnet (MDE) for writing XMP data to .jpg/.jpeg files</Description>
+	  <AssemblyTitle>Jpg XMP Write Plugin for MDE</AssemblyTitle>
+	  <PackageTags>XMP;Metadata;Writer;DotNet</PackageTags>
+	  <Version>$(VersionNumber)</Version>
+	  <SignAssembly>true</SignAssembly>
+	  <!--<PublicSign>true</PublicSign>-->
     <OutputType>Library</OutputType>
     <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="All"/>
