@@ -96,5 +96,24 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor
 
 			throw new ImageProcessingException("File format is not supported");
 		}
-	}
+
+        /// <summary>Writes metadata to a file.</summary>
+        /// <param name="fileName">The path to a file to update.</param>
+        /// <param name="metadata">Collection of metadata objects.</param>
+        /// <exception cref="ImageProcessingException">The file type is unknown, or processing errors occurred.</exception>
+        public static void WriteMetadata(string fileName, IEnumerable<object> metadata)
+        {
+            ArgumentNullException.ThrowIfNull(fileName, nameof(fileName));
+
+            using var fileStream = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite);
+            using var updatedData = WriteMetadata(fileStream, metadata);
+
+            // Write back to the source file on success
+            // Assumes that WriteMetadata either works or throws...
+            fileStream.Seek(0, SeekOrigin.Begin);
+            updatedData.Seek(0, SeekOrigin.Begin);
+            fileStream.SetLength(0);
+            updatedData.CopyTo(fileStream);
+        }
+    }
 }
