@@ -5,7 +5,12 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JpegXmpWritePluginMDE", "JpegXmpWritePluginMDE\JpegXmpWritePluginMDE.csproj", "{7AF4229E-F42F-48FC-BCB1-3182516BE31B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JpegXmpWritePluginMDE.Tests", "JpegXmpWritePluginMDE.Tests\JpegXmpWritePluginMDE.Tests.csproj", "{062B9FA1-4961-4B35-A2DB-65036C74BBC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JpegXmpWritePluginMDE.Tests", "JpegXmpWritePluginMDE.Tests\JpegXmpWritePluginMDE.Tests.csproj", "{062B9FA1-4961-4B35-A2DB-65036C74BBC9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5BEB7B0C-940F-4CBE-BEF9-02C2C82A984F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
