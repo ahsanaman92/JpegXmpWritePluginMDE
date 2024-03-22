@@ -21,6 +21,7 @@
 //    https://drewnoakes.com/code/exif/
 //
 #endregion
+using JpegXmpWritePluginMDE.MetadataExtractor;
 using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.IO;
@@ -93,14 +94,16 @@ namespace JpegXmpWritePluginMDE.Tests.Formats.Jpeg
 		[Fact]
 		public void TestWriteJpegMetadata()
 		{
-			var originalStream = TestDataUtil.OpenRead("Data/xmpWriting_PictureWithMicrosoftXmp.jpg");
-			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
-			byte[] expectedResult = TestDataUtil.GetBytes("Data/xmpWriting_PictureWithMicrosoftXmpReencoded.jpg");
+			string writeToFile = TestDataUtil.GetFullTestFilePath("xmpWriting_PictureWithMicrosoftXmp.jpg");
+			string xmpToWrite = TestDataUtil.GetFullTestFilePath("xmpWriting_XmpContent.xmp");
+			string expectedOutputFile = TestDataUtil.GetFullTestFilePath("xmpWriting_PictureWithMicrosoftXmpReencoded.jpg");
+
+			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText(xmpToWrite));
+			byte[] expectedResult = TestDataUtil.GetBytes(expectedOutputFile);
 
 			var metadata_objects = new object[] { xmp };
-			var updatedStream = JpegMetadataWriter.WriteMetadata(originalStream, metadata_objects);
-
-			var actualResult = updatedStream.ToArray();
+			ImageMetadataWriter.WriteMetadata(writeToFile, metadata_objects);
+			byte[] actualResult = TestDataUtil.GetBytes(writeToFile);
 
 			Assert.True(actualResult.SequenceEqual(expectedResult));
 		}
