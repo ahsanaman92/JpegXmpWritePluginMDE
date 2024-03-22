@@ -144,20 +144,21 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 		}
 
 		/// <summary>
-		/// Concatenates the provided JpegFragments into a <see cref="MemoryStream"/> object.
+		/// Concatenates the provided JpegFragments into a <see cref="byte[]"/>.
 		/// </summary>
 		/// <param name="fragments">a list of JpegFragments that shall be joined.</param>
 		[NotNull]
-		public static MemoryStream JoinFragments([NotNull] IEnumerable<JpegFragment> fragments)
+		public static byte[] JoinFragments([NotNull] IEnumerable<JpegFragment> fragments)
 		{
-			MemoryStream output = new MemoryStream();
-
-			foreach (JpegFragment fragment in fragments)
+			using (MemoryStream output = new MemoryStream())
 			{
-				output.Write(fragment.Bytes, 0, fragment.Bytes.Length);
-			}
+				foreach (JpegFragment fragment in fragments)
+				{
+					output.Write(fragment.Bytes, 0, fragment.Bytes.Length);
+				}
 
-			return output;
+				return output.ToArray();
+			}	
 		}
 
 		/// <summary>

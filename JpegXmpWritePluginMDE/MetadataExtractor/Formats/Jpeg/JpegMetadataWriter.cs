@@ -55,20 +55,22 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 		/// <param name="original">Stream of the original file.</param>
 		/// <param name="metadata">Collection of metadata objects.</param>
 		/// <returns>A new stream that contains Jpeg data, updated with the metadata.</returns>
-		public static MemoryStream WriteMetadata([NotNull] Stream original, [NotNull] IEnumerable<object> metadata)
+		public static void WriteMetadata([NotNull] Stream stream, [NotNull] IEnumerable<object> metadata)
 		{
-			var ssr = new SequentialStreamReader(original, isMotorolaByteOrder:true);
+			using (BinaryWriter binaryWriter = new BinaryWriter(stream))
+			{
+				var ssr = new SequentialStreamReader(stream, isMotorolaByteOrder: true);
+				// 1. split up the original data into a collection of fragments (non-coding and coding)
+				List<JpegFragment> fragments = JpegFragmentWriter.SplitFragments(ssr);
+				// Reset the original stream as everything has been read from it
+				stream.SetLength(0);
+				// for each metadata item, apply a compatible writer to the segments
+				// this updates the fragments with the metadata
+				fragments = UpdateJpegFragments(fragments, metadata);
 
-			// 1. split up the original data into a collection of fragments (non-coding and coding)
-			List<JpegFragment> fragments = JpegFragmentWriter.SplitFragments(ssr);
-
-			// for each metadata item, apply a compatible writer to the segments
-			// this updates the fragments with the metadata
-			fragments = UpdateJpegFragments(fragments, metadata);
-
-			// now concatenate all fragments back into the complete file
-			return JpegFragmentWriter.JoinFragments(fragments);
-
+				// now concatenate all fragments back into the complete file and write to original stream
+				binaryWriter.Write(JpegFragmentWriter.JoinFragments(fragments));
+			}
 			//if (JpegFragmentWriter.IsValid(fragments))
 			//{
 			//    return JpegFragmentWriter.JoinFragments(fragments);
