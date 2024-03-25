@@ -61,40 +61,51 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor
 		/// <exception cref="ImageProcessingException">The file type is unknown, or processing errors occurred.</exception>
 		/// <exception cref="IOException"/>
 		[NotNull]
-		public static MemoryStream WriteMetadata([NotNull] Stream stream, IEnumerable<object> metadata)
+		public static void WriteMetadata([NotNull] string filePath, IEnumerable<object> metadata)
 		{
-			var fileType = FileTypeDetector.DetectFileType(stream);
-			switch (fileType)
+			using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
 			{
-				case FileType.Jpeg: return JpegMetadataWriter.WriteMetadata(stream, metadata);
-					//case FileType.Tiff:
-					//case FileType.Arw:
-					//case FileType.Cr2:
-					//case FileType.Nef:
-					//case FileType.Orf:
-					//case FileType.Rw2:
-					//    return TiffMetadataReader.ReadMetadata(stream);
-					//case FileType.Psd:
-					//    return PsdMetadataReader.ReadMetadata(stream);
-					//case FileType.Png:
-					//    return PngMetadataReader.ReadMetadata(stream);
-					//case FileType.Bmp:
-					//    return new[] { BmpMetadataReader.ReadMetadata(stream) };
-					//case FileType.Gif:
-					//    return new[] { GifMetadataReader.ReadMetadata(stream) };
-					//case FileType.Ico:
-					//    return IcoMetadataReader.ReadMetadata(stream);
-					//case FileType.Pcx:
-					//    return new[] { PcxMetadataReader.ReadMetadata(stream) };
-					//case FileType.Riff:
-					//    return WebPMetadataReader.ReadMetadata(stream);
-					//case FileType.Raf:
-					//    return RafMetadataReader.ReadMetadata(stream);
-					//case FileType.QuickTime:
-					//    return QuicktimeMetadataReader.ReadMetadata(stream);
-			}
+				var fileType = FileTypeDetector.DetectFileType(stream);
+				try
+				{
+					switch (fileType)
+					{
+						case FileType.Jpeg:
+							JpegMetadataWriter.WriteMetadata(stream, metadata);
+							break;
+							//case FileType.Tiff:
+							//case FileType.Arw:
+							//case FileType.Cr2:
+							//case FileType.Nef:
+							//case FileType.Orf:
+							//case FileType.Rw2:
+							//    return TiffMetadataReader.ReadMetadata(stream);
+							//case FileType.Psd:
+							//    return PsdMetadataReader.ReadMetadata(stream);
+							//case FileType.Png:
+							//    return PngMetadataReader.ReadMetadata(stream);
+							//case FileType.Bmp:
+							//    return new[] { BmpMetadataReader.ReadMetadata(stream) };
+							//case FileType.Gif:
+							//    return new[] { GifMetadataReader.ReadMetadata(stream) };
+							//case FileType.Ico:
+							//    return IcoMetadataReader.ReadMetadata(stream);
+							//case FileType.Pcx:
+							//    return new[] { PcxMetadataReader.ReadMetadata(stream) };
+							//case FileType.Riff:
+							//    return WebPMetadataReader.ReadMetadata(stream);
+							//case FileType.Raf:
+							//    return RafMetadataReader.ReadMetadata(stream);
+							//case FileType.QuickTime:
+							//    return QuicktimeMetadataReader.ReadMetadata(stream);
+					}
+				}
+				catch (Exception)
+				{
 
-			throw new ImageProcessingException("File format is not supported");
+					throw new ImageProcessingException("File format is not supported");
+				}
+			}
 		}
 	}
 }

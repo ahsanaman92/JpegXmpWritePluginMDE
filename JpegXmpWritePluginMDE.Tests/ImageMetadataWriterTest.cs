@@ -34,14 +34,18 @@ namespace JpegXmpWritePluginMDE.Tests
 		[Fact]
 		public void TestWriteImageMetadata()
 		{
-			var originalStream = TestDataUtil.OpenRead("Data/xmpWriting_PictureWithMicrosoftXmp.jpg");
-			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
-			byte[] expectedResult = TestDataUtil.GetBytes("Data/xmpWriting_PictureWithMicrosoftXmpReencoded.jpg");
+			string writeToFile = TestDataUtil.CreateTestCopy("xmpWriting_PictureWithMicrosoftXmp.jpg");
+			string xmpToWrite = TestDataUtil.GetFullTestFilePath("xmpWriting_XmpContent.xmp");
+			string expectedOutputFile = TestDataUtil.GetFullTestFilePath("xmpWriting_PictureWithMicrosoftXmpReencoded.jpg");
+
+			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText(xmpToWrite));
+			byte[] expectedResult = TestDataUtil.GetBytes(expectedOutputFile);
 			
 			var metadata_objects = new object[] { xmp };
-			var updatedStream = ImageMetadataWriter.WriteMetadata(originalStream, metadata_objects);
+			ImageMetadataWriter.WriteMetadata(writeToFile, metadata_objects);
+			byte[] actualResult = TestDataUtil.GetBytes(writeToFile);
 
-			var actualResult = updatedStream.ToArray();
+			TestDataUtil.DeleteTestFile(writeToFile);
 
 			Assert.True(actualResult.SequenceEqual(expectedResult));
 		}
