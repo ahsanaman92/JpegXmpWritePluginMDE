@@ -55,7 +55,7 @@ namespace JpegXmpWritePluginMDE.Tests.Formats.Xmp
 		public void TestUpdateFragments_Replace()
 		{
 			// substitute the original with re-encoded Xmp content
-			List<JpegFragment> originalFragments = null;
+			List<JpegFragment>? originalFragments = null;
 			using (var stream = TestDataUtil.OpenRead("Data/xmpWriting_PictureWithMicrosoftXmp.jpg"))
 				originalFragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
 			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));
@@ -89,7 +89,7 @@ namespace JpegXmpWritePluginMDE.Tests.Formats.Xmp
 		public void TestUpdateFragments_Insert()
 		{
 			// substitute the original with re-encoded Xmp content
-			List<JpegFragment> originalFragments = null;
+			List<JpegFragment>? originalFragments = null;
 			using (var stream = TestDataUtil.OpenRead("Data/xmpWriting_PictureWithoutXmp.jpg"))
 				originalFragments = JpegFragmentWriter.SplitFragments(new SequentialStreamReader(stream));
 			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText("Data/xmpWriting_XmpContent.xmp"));

@@ -61,7 +61,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Xmp
 
 				if (!wroteData && currentFragment.IsSegment)
 				{
-					JpegSegmentType currentType = currentFragment.Segment.Type;
+					JpegSegmentType currentType = currentFragment.Segment!.Type;
 
 					// if this is an existing App1 XMP fragment, overwrite it with the new fragment
 					if (currentType == JpegSegmentType.App1 && currentFragment.Segment.Bytes.Length > XmpReader.JpegSegmentPreamble.Length)

@@ -48,7 +48,7 @@ namespace JpegXmpWritePluginMDE.Tests.Formats.Jpeg
 			Assert.Single(fragments);
 			Assert.True(fragments.First().Bytes.SequenceEqual(fileBytes));
 			Assert.NotNull(fragments.First().Segment);
-			Assert.Equal(JpegSegmentType.App1, fragments.First().Segment.Type);
+			Assert.Equal(JpegSegmentType.App1, fragments.First().Segment!.Type);
 		}
 
 		[Fact]
