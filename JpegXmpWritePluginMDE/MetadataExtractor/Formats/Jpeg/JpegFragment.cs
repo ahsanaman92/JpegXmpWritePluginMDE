@@ -1,8 +1,4 @@
-﻿using JetBrains.Annotations;
-using MetadataExtractor.Formats.Jpeg;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MetadataExtractor.Formats.Jpeg;
 
 namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 {
@@ -21,13 +17,11 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 		/// <summary>
 		/// JpegSegment interpretation of this fragment.
 		/// </summary>
-		[CanBeNull]
-		public JpegSegmentPlugin Segment { get; }
+		public JpegSegmentPlugin? Segment { get; }
 
 		/// <summary>
 		/// All bytes that make up the JpegFragment. (Includes potential JpegSegment marker + size)
 		/// </summary>
-		[NotNull]
 		public byte[] Bytes { get; }
 
 		/// <summary>
@@ -35,7 +29,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 		/// </summary>
 		/// <param name="bytes">All bytes that make up the fragment.</param>
 		/// <param name="segment">Optional JpegSegment interpretation of this fragment.</param>
-		public JpegFragment([NotNull] byte[] bytes, [CanBeNull] JpegSegmentPlugin segment = null)
+		public JpegFragment(byte[] bytes, JpegSegmentPlugin? segment = null)
 		{
 			Bytes = bytes;
 			Segment = segment;
@@ -44,7 +38,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 		public override string ToString()
 		{
 			if (IsSegment)
-				return $"{Bytes.Length} bytes ({Segment.Type})";
+				return $"{Bytes.Length} bytes ({Segment!.Type})";
 			else
 				return $"{Bytes.Length} bytes";
 		}
