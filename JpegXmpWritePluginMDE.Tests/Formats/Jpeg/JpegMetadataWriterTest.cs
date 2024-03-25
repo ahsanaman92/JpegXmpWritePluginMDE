@@ -94,7 +94,7 @@ namespace JpegXmpWritePluginMDE.Tests.Formats.Jpeg
 		[Fact]
 		public void TestWriteJpegMetadata()
 		{
-			string writeToFile = TestDataUtil.GetFullTestFilePath("xmpWriting_PictureWithMicrosoftXmp.jpg");
+			string writeToFile = TestDataUtil.CreateTestCopy("xmpWriting_PictureWithMicrosoftXmp.jpg");
 			string xmpToWrite = TestDataUtil.GetFullTestFilePath("xmpWriting_XmpContent.xmp");
 			string expectedOutputFile = TestDataUtil.GetFullTestFilePath("xmpWriting_PictureWithMicrosoftXmpReencoded.jpg");
 
@@ -105,6 +105,7 @@ namespace JpegXmpWritePluginMDE.Tests.Formats.Jpeg
 			ImageMetadataWriter.WriteMetadata(writeToFile, metadata_objects);
 			byte[] actualResult = TestDataUtil.GetBytes(writeToFile);
 
+			TestDataUtil.DeleteTestFile(writeToFile);
 			Assert.True(actualResult.SequenceEqual(expectedResult));
 		}
 	}
