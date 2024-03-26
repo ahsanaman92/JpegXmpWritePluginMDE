@@ -9,7 +9,6 @@
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/ahsanaman92/JpegXmpWritePluginMDE.git</RepositoryUrl>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
-		<IncludeSource>true</IncludeSource>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 	</PropertyGroup>
