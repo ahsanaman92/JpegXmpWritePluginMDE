@@ -25,6 +25,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore JpegXmpWritePluginMDE.sln
     - name: Build
-      run: dotnet build JpegXmpWritePluginMDE.sln --configuration Release
+      run: dotnet build JpegXmpWritePluginMDE.sln --configuration Release /p:ContinuousIntegrationBuild=true
     - name: Test net8.0
       run: dotnet test --verbosity normal --configuration Release --no-build -f net8.0 JpegXmpWritePluginMDE.Tests\JpegXmpWritePluginMDE.Tests.csproj
