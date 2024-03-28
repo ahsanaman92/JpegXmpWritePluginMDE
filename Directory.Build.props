@@ -4,13 +4,11 @@
 	<!-- common NuGet package settings-->
 	<PropertyGroup>
 		<Authors>Michael Osthege;Ahsan Cheema</Authors>
-		<PackageProjectUrl>https://github.com/ahsanaman92/JpegXmpWritePluginMDE</PackageProjectUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/ahsanaman92/JpegXmpWritePluginMDE.git</RepositoryUrl>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
-		<IncludeSource>true</IncludeSource>
-		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+				<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 	</PropertyGroup>
 
