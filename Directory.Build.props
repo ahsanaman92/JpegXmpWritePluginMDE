@@ -11,7 +11,7 @@
 
 	<!-- common build properties -->
 	<PropertyGroup>
-		<VersionNumber Condition=" '$(Version)'=='' ">2.9.0.1</VersionNumber>
+		<VersionNumber Condition=" '$(Version)'=='' ">2.9.2</VersionNumber>
 		<NuGetAudit>enable</NuGetAudit>
 		<NuGetAuditMode>all</NuGetAuditMode>
 		<UseArtifactsOutput>true</UseArtifactsOutput>
