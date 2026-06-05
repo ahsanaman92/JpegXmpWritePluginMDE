@@ -49,5 +49,29 @@ namespace JpegXmpWritePluginMDE.Tests
 
 			Assert.True(actualResult.SequenceEqual(expectedResult));
 		}
+
+		[Fact]
+		public void TestWriteImageMetadataWithStream()
+		{
+			string writeToFile = TestDataUtil.CreateTestCopy("xmpWriting_PictureWithMicrosoftXmp.jpg");
+			string xmpToWrite = TestDataUtil.GetFullTestFilePath("xmpWriting_XmpContent.xmp");
+			string expectedOutputFile = TestDataUtil.GetFullTestFilePath("xmpWriting_PictureWithMicrosoftXmpReencoded.jpg");
+
+			IXmpMeta xmp = XmpMetaFactory.ParseFromString(File.ReadAllText(xmpToWrite));
+			byte[] expectedResult = TestDataUtil.GetBytes(expectedOutputFile);
+			
+			var metadata_objects = new object[] { xmp };
+
+			using (var stream = new FileStream(writeToFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+			{
+				ImageMetadataWriter.WriteMetadata(stream, metadata_objects);
+			}
+			
+			byte[] actualResult = TestDataUtil.GetBytes(writeToFile);
+
+			TestDataUtil.DeleteTestFile(writeToFile);
+
+			Assert.True(actualResult.SequenceEqual(expectedResult));
+		}
 	}
 }
