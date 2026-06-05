@@ -57,7 +57,8 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 		/// <returns>A new stream that contains Jpeg data, updated with the metadata.</returns>
 		public static void WriteMetadata([NotNull] Stream stream, [NotNull] IEnumerable<object> metadata)
 		{
-			using (BinaryWriter binaryWriter = new BinaryWriter(stream))
+			// Leave the input stream open here in case the caller still needs to use it
+			using (BinaryWriter binaryWriter = new BinaryWriter(stream, System.Text.Encoding.UTF8, leaveOpen: true))
 			{
 				var ssr = new SequentialStreamReader(stream, isMotorolaByteOrder: true);
 				// 1. split up the original data into a collection of fragments (non-coding and coding)
