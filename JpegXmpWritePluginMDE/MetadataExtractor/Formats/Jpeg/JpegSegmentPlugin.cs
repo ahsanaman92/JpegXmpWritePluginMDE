@@ -22,10 +22,7 @@
 //
 #endregion
 
-using JetBrains.Annotations;
 using MetadataExtractor.Formats.Jpeg;
-using System;
-using System.Runtime.CompilerServices;
 
 namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 {
@@ -37,10 +34,10 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 	public sealed class JpegSegmentPlugin
 	{
 		public JpegSegmentType Type { get; }
-		[NotNull] public byte[] Bytes { get; }
+		public byte[] Bytes { get; }
 		public long Offset { get; }
 
-		public JpegSegmentPlugin(JpegSegmentType type, [NotNull] byte[] bytes, long offset)
+		public JpegSegmentPlugin(JpegSegmentType type, byte[] bytes, long offset)
 		{
 			Type = type;
 			Bytes = bytes;

@@ -22,7 +22,6 @@
 //
 #endregion
 
-using JetBrains.Annotations;
 using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor;
 
@@ -60,8 +59,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor
 		/// <param name="metadata">Collection of metadata objects.</param>
 		/// <exception cref="ImageProcessingException">The file type is unknown, or processing errors occurred.</exception>
 		/// <exception cref="IOException"/>
-		[NotNull]
-		public static void WriteMetadata([NotNull] string filePath, IEnumerable<object> metadata)
+		public static void WriteMetadata(string filePath, IEnumerable<object> metadata)
 		{
 			using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
 			{
@@ -74,8 +72,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor
 		/// <param name="metadata">Collection of metadata objects.</param>
 		/// <exception cref="ImageProcessingException">The file type is unknown, or processing errors occurred.</exception>
 		/// <exception cref="IOException"/>
-		[NotNull]
-		public static void WriteMetadata([NotNull] Stream stream, IEnumerable<object> metadata)
+		public static void WriteMetadata(Stream stream, IEnumerable<object> metadata)
 		{
 			if (!stream.CanWrite)
 			{
