@@ -1,10 +1,7 @@
-﻿using JetBrains.Annotations;
-using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg;
+﻿using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.Formats.Xmp;
 using System.Text;
-using System.Xml;
-using System.Xml.Linq;
 using XmpCore;
 using XmpCore.Impl;
 using XmpCore.Options;
@@ -34,7 +31,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Xmp
 		/// <param name="fragments">Original file fragmets</param>
 		/// <param name="metadata">The Xmp metadata that shall be written</param>
 		/// <returns>A new list of JpegFragments</returns>
-		public List<JpegFragment> UpdateFragments([NotNull] FragmentList fragments, [NotNull] object metadata)
+		public List<JpegFragment> UpdateFragments(FragmentList fragments, object metadata)
 		{
 			JpegFragment metadataFragment;
 			List<JpegFragment> output = new List<JpegFragment>();
@@ -102,7 +99,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Xmp
 		/// </summary>
 		/// <param name="xmpMeta">Xmp document to be encoded</param>
 		/// <returns>App1 segment payload</returns>
-		public static byte[] WritePreambleToXmpBytes([NotNull] IXmpMeta xmpMeta)
+		public static byte[] WritePreambleToXmpBytes(IXmpMeta xmpMeta)
 		{
 			// xmp preamble
 			byte[] preamble = XmpReader.JpegSegmentPreamble.ToArray();

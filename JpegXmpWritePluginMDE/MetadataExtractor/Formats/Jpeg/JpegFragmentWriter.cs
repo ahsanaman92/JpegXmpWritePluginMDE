@@ -25,9 +25,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using JetBrains.Annotations;
 using MetadataExtractor.Formats.Jpeg;
 using MetadataExtractor.IO;
 
@@ -51,8 +48,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 		/// It must be positioned at the beginning of the JPEG data stream.
 		/// </param>
 		/// <returns>A list of all fragments that, when concatenated, match the input stream.</returns>
-		[NotNull]
-		public static List<JpegFragment> SplitFragments([NotNull] SequentialReader reader)
+		public static List<JpegFragment> SplitFragments(SequentialReader reader)
 		{
 			if (!reader.IsMotorolaByteOrder)
 				throw new JpegProcessingException("Must be big-endian/Motorola byte order.");
@@ -147,8 +143,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 		/// Concatenates the provided JpegFragments into a <see cref="byte[]"/>.
 		/// </summary>
 		/// <param name="fragments">a list of JpegFragments that shall be joined.</param>
-		[NotNull]
-		public static byte[] JoinFragments([NotNull] IEnumerable<JpegFragment> fragments)
+		public static byte[] JoinFragments(IEnumerable<JpegFragment> fragments)
 		{
 			using (MemoryStream output = new MemoryStream())
 			{
@@ -166,7 +161,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 		/// </summary>
 		/// <param name="fragments">Ordered list of JpegFragments</param>
 		/// <returns>true if passed</returns>
-		public static bool IsValid([NotNull] IEnumerable<JpegFragment> fragments)
+		public static bool IsValid(IEnumerable<JpegFragment> fragments)
 		{
 			throw new NotImplementedException();
 		}

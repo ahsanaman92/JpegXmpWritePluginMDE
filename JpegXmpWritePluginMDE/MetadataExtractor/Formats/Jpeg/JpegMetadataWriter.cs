@@ -22,7 +22,6 @@
 //
 #endregion
 
-using JetBrains.Annotations;
 using JpegXmpWritePluginMDE.MetadataExtractor.Formats.Xmp;
 
 #if !PORTABLE
@@ -55,7 +54,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 		/// <param name="original">Stream of the original file.</param>
 		/// <param name="metadata">Collection of metadata objects.</param>
 		/// <returns>A new stream that contains Jpeg data, updated with the metadata.</returns>
-		public static void WriteMetadata([NotNull] Stream stream, [NotNull] IEnumerable<object> metadata)
+		public static void WriteMetadata(Stream stream, IEnumerable<object> metadata)
 		{
 			// Leave the input stream open here in case the caller still needs to use it
 			using (BinaryWriter binaryWriter = new BinaryWriter(stream, System.Text.Encoding.UTF8, leaveOpen: true))
@@ -89,7 +88,7 @@ namespace JpegXmpWritePluginMDE.MetadataExtractor.Formats.Jpeg
 		/// <param name="metadata">Collection of metadata items.</param>
 		/// <param name="writers">A dictionary that maps metadata types to compatible JpegMetadataWriters.</param>
 		/// <returns>The updated list of JpegFragments</returns>
-		public static List<JpegFragment> UpdateJpegFragments([NotNull] List<JpegFragment> fragments, [NotNull] IEnumerable<object> metadata, [NotNull] Dictionary<Type, IJpegFragmentMetadataWriter>? writers = null)
+		public static List<JpegFragment> UpdateJpegFragments(List<JpegFragment> fragments, IEnumerable<object> metadata, Dictionary<Type, IJpegFragmentMetadataWriter>? writers = null)
 		{
 			if (writers == null)
 				writers = _allWriters;
